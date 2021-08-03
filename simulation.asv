@@ -1,23 +1,23 @@
 clear; close all; 
 % define the system variables and model: 
-T = 0.5;
+T = 0.05;
 F = eye(3); 
 
 % define signal parameters: system
-var_v1 =1e-6; 
-var_v2 =1e-6; 
-var_v3 = 1e-6; 
+var_v1 =1e-3; 
+var_v2 =1e-3; 
+var_v3 = 1e-3; 
 Q_k = diag([var_v1 var_v2 var_v3]); 
 
 % define signal parameters: observation/sensor
 var_w1 = 1e-4;
 var_w2 = 1e-4; 
 W_k = diag([var_w1 var_w2]); 
-b = 0.5; %width of chassis
+b = 0.5; %bias of odometer
 H = [1 0 b; 1 0 -b]; 
 
 %simulation variables: 
-ITER = 1e2; %number of iterations 
+ITER = 1e3; %number of iterations
 
 x_k = [1;0;0;]; % Plant initial state
 xhat_last = [5; 0.01; 3]; %Last optimal predicted value (X_hat{k-1}): zero initially 
@@ -82,15 +82,13 @@ figure()
 
 subplot 221
 hold on
-plot(historyX_k(1, end-P:end), 'kd:')
-plot(historyX_predict(1, end-P:end), 'bs--', 'LineWidth',2)
+plot(historyX_k(1, end-P:end), 'k-')
+plot(historyX_predict(1, end-P:end), 'b--', 'LineWidth',2)
 xlabel("time", 'fontsize',12)
 ylabel("x Velocity", 'fontsize',12)
 title("X velocity of Linear system", 'fontsize',14)
-lgd = legend('Stochastic Velocity',...
-    'Estimated Velocity', 'location', 'best');lgd.FontSize = 14;
-% lgd = legend('True Velocity', 'Predicted Velocity', 'location', 'best')
-% lgd.FontSize = 12
+lgd = legend('True Velocity', 'Predicted Velocity', 'location', 'best')
+lgd.FontSize = 12
 hold off
 
 subplot 222
