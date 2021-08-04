@@ -21,7 +21,7 @@ ITER = 1e2; %number of iterations
 
 %states:
 x_k = [1;0;0;]; % Plant initial state
-xhat_last = [5; 0.01; 3]; %Last optimal predicted value (X_hat{k-1}): zero initially 
+xhat_last = [0; 0; 0]; %Last optimal predicted value (X_hat{k-1}): zero initially 
 P_last = eye(3); % Last covarianceix value for the estimated states
 y_last = 0; %last observation: zero initially 
 
