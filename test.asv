@@ -1,5 +1,5 @@
 clear; close all; 
-ITER = 1e4; 
+ITER = 1e2; 
 
 
 
@@ -20,10 +20,12 @@ b = 1/2; %width of chassis
 H = [1 0 b; 1 0 -b]; 
 
 %generate values 
-x_k = [0.1; 0.01; 1];
+x_ = [0; 0; 0];
 history = zeros(3+3, 1); 
 
-filter = trackingEKF(@state_transition, @measurement_f, x_k, 'StateTransitionJacobianFcn', @state_j, 'MeasurementJacobianFcn', @measurement_j, 'ProcessNoise', Q_k, 'MeasurementNoise', W_k)
+filter = trackingEKF('StateTransitionFcn', @state_transition, 'MeasurementFcn', @measurement_f,...
+    'State',x_k, 'StateTransitionJacobianFcn', @state_j, 'MeasurementJacobianFcn', @measurement_j,...
+    'ProcessNoise', Q_k, 'MeasurementNoise', W_k)
 
 for k = 1:ITER
     
@@ -35,7 +37,6 @@ for k = 1:ITER
     %generate xk and yk: 
     x_k = F*x_k + T*(v+[x_k(2)*x_k(3);-x_k(3)*x_k(3);0]);     
     y_k = H*x_k + w;
-    filter = trackingEKF(@state_transition, @measurement_f, x_k, 'StateTransitionJacobianFcn', @state_j, 'MeasurementJacobianFcn', @measurement_j, 'ProcessNoise', Q_k, 'MeasurementNoise', W_k);
     [xpred, Ppred] = predict(filter);
     [xcorr, Pcorr] = correct(filter, y_k);
     history(:, k) = vertcat(x_k, xcorr); 
@@ -46,13 +47,13 @@ end
 figure()
 hold on 
 
-plot(history(4, :), 'linewidth', 2)
+plot(history(4, :), 'ko','linewidth', 2)
 plot(history(1, :))
 title("x velocity ")
 hold off
 figure()
 hold on 
 plot(history(5, :))
-plot(history(2, :), 'linewidth', 2)
+plot(history(2, :), 'ko', 'linewidth', 2)
 title("y velocity ")
 hold off
