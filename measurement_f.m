@@ -1,4 +1,4 @@
-function y_k = measurement_f(x_k)
+function y_k = measurement_f(x_k, T)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 b = 1/2;
